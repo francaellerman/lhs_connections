@@ -1,0 +1,109 @@
+{% extends 'layout.html' %}
+{% block title %}
+    LHS 2023 Connections
+{% endblock %}
+{% block description %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">franca.link</a></li>
+            <li class="breadcrumb-item active">connections</li>
+        </ol>
+    </nav>
+{% endblock %}
+{% block content %}
+    <div id='landing' class='page_item' v-if='!cookie && !started_uploading'>
+        <div class='card-body'>
+            <h3>See who's in your classes next year</h3>
+            <div>
+                <div>
+                    <div class='list_item'>
+                        <h1>23</h1>
+                        <p>For Lexington High School, MA's class of 2023.</p>
+                    </div>
+                    <div class='list_item'>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-stopwatch" viewBox="0 0 16 16">
+                          <path d="M8.5 5.6a.5.5 0 1 0-1 0v2.9h-3a.5.5 0 0 0 0 1H8a.5.5 0 0 0 .5-.5V5.6z"/>
+                          <path d="M6.5 1A.5.5 0 0 1 7 .5h2a.5.5 0 0 1 0 1v.57c1.36.196 2.594.78 3.584 1.64a.715.715 0 0 1 .012-.013l.354-.354-.354-.353a.5.5 0 0 1 .707-.708l1.414 1.415a.5.5 0 1 1-.707.707l-.353-.354-.354.354a.512.512 0 0 1-.013.012A7 7 0 1 1 7 2.071V1.5a.5.5 0 0 1-.5-.5zM8 3a6 6 0 1 0 .001 12A6 6 0 0 0 8 3z"/>
+                        </svg>
+                        <p>No sign-up. Free. Fast.</p>
+                    </div>
+                    <div class='list_item'>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
+                          <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+                        </svg>
+                        <p>Share <a href='franca.link/connections'>franca.link/connections</a> for more connections.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <img src='static/landing_example.png'>
+    </div>
+    <div v-if='errors' class="alert alert-danger text_card page_item" role="alert">
+        [[errors]] I was emailed about it and depending on the information available, I may email your school email address about it. I would appreciate it if <a href='mailto:23ellerman2@lexingtonma.org'>you emailed me</a> either way.
+    </div>
+    <template v-if='started_uploading && !cookie && !errors'>
+        <div class='spinner-border page_item'></div>
+        <p>Uploading...</p>
+    </template>
+    <template v-else-if='cookie && !connections && !errors'>
+        <div class='spinner-border page_item'></div>
+        <p>Getting connections...</p>
+    </template>
+    <div id='instructions' v-show='!cookie && (!started_uploading || errors)'>
+        <h3>Follow 3 steps here</h3>
+        <div class='text_card card card-body page_item'>
+           <ol>
+               <li>Go to <a href='https://ma-lexington.myfollett.com/aspen/logon.do' target='_blank'>Aspen</a>.</li>
+               {% if mobile %}
+                   <li>Scroll down, click on 'Published Reports', and click on 'Schedule_for_YOG_2023_from_Build.pdf' to download it.</li>
+                   <img src='static/mobile_aspen.jpg'>
+               {% else %}
+                   <li>Click on 'Schedule_for_YOG_2023_from_Build.pdf' under 'Published Reports' to download it.</li>
+                   <img src='static/computer_aspen.jpg'>
+               {% endif %}
+           </ol>
+        </div>
+        <div class='card card-body page_item'>
+            <ol start='3'>
+               <li>Click below to search and select 'Schedule_for_YOG_2023_from_Build.pdf' from your files.</li>
+            </ol>
+            <input class='form-control form-control-{% if mobile %}sm{% else %}lg
+                {% endif %}
+            ' @change='upload' type='file' accept='.pdf'>
+        </div>
+    </div>
+    <template v-if='connections'>
+        <h4 class='page_item' id='name'>[[name]]'s Connections</h4>
+        <div v-if='connections.length == 0' class='page_item card card-body text_card'>
+            <p>You have no connections right now.</p>
+            <p>Share <a href='franca.link/connections'>franca.link/connections</a> with people in the Class of 2023 and check back here!</p>
+        </div>
+        <div v-for='course in connections' class='card course_card page_item'>
+            <div class='card-body'>
+                <h5 class='card-title'>
+                    [[course.class.course]]</h5>
+                <h5><span class='badge bg-secondary'>Section [[course.class.section]]</span>
+                    <span v-if='course.class.term != "ALL"' class='badge bg-secondary'>[[course.class.term]]</span>
+                </h5>
+            </div>
+            <ul class='list-group list-group-flush'>
+                <li v-for='classmate of course.classmates' class='list-group-item'>[[classmate]]</li>
+            </ul>
+        </div>
+    </template>
+{% endblock %}
+{% block more_buttons %}
+    <a class='btn btn-outline-success page_item' href='about' role='button'>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+        </svg>
+        About
+    </a>
+    <button @click='reset' type='button' class='btn btn-outline-danger page_item'>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+          <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+        </svg>
+        Restart
+    </button>
+{% endblock %}
