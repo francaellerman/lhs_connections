@@ -67,7 +67,6 @@ def insert_sql_data(information, time, file):
     [upsert_course_name(row) for row in course_df.to_numpy()]
     #course_df = course_df.rename(columns={'course_no': 'id'})
     #course_df = course_df.set_index('id')
-    print(course_df)
     df = df.drop(columns=['Course', 'name'])
     df.to_sql('enrollments', con=con, if_exists='append', index=False)
     #Should throw an error if there are multiple names to the same course ID

@@ -8,6 +8,7 @@ setup(name='lhs_connections',
       py_modules=['lhs_connections'],
       install_requires = [
           'flask',
+          'logging_franca_link @ git+https://github.com/francaellerman/logging_franca_link',
           'pdfminer',
           'PyPDF2',
           'tabula',
