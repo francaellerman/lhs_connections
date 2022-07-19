@@ -1,5 +1,5 @@
 from pdfminer.pdfparser import PDFParser
-from pdfminer.pdfparser import PDFDocument
+from pdfminer.pdfdocument import PDFDocument
 import PyPDF2
 import pickle
 import os
