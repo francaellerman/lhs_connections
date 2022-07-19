@@ -7,6 +7,7 @@ import tabula
 import sqlite3
 import pandas as pd
 import pkg_resources
+import subprocess
 
 start = 'connections/'
 
