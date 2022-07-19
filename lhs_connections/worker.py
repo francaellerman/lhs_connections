@@ -125,3 +125,4 @@ def make_sql_databases():
     cursor.execute("create table students(id integer primary key, created text, name text)")
     #con.commit()
     con.close()
+    subprocess.run(['sqlite3', start + 'connections.sql', '".backup connections/backup_connections.sql"'])

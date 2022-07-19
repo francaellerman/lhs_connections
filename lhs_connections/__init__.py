@@ -54,7 +54,7 @@ def post():
                 raise Exception("Getting PDF metadata raised a warning")
         information = worker.get_pdf_info(file)
         if worker.returning_user_name(information['ID']):
-            message = "Returning user POST"
+            message = "Request success: returning user"
         else:
             file.seek(0)
             worker.insert_sql_data(information, time, file)

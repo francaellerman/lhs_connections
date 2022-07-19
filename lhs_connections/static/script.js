@@ -1,5 +1,7 @@
 const {createApp} = Vue
 
+new ClipboardJS('#copy_space .list-group-item-action')
+
 var app = createApp({
     data() {
         return {
@@ -7,7 +9,8 @@ var app = createApp({
             cookie: false,
             name: '',
             connections: null,
-            errors: null
+            errors: null,
+            loona: 'Loona'
         }
     },
     async created() {
